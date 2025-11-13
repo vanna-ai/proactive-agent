@@ -17,15 +17,19 @@ import yaml
 import requests
 from queue import Queue
 from threading import Thread
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # Vanna configuration
-VANNA_API_KEY = os.environ.get("VANNA_API_KEY", "vn-96862437e7034ebeb1082c45e0181caf")
+VANNA_API_KEY = os.environ.get("VANNA_API_KEY")
 VANNA_API_URL = "https://app.vanna.ai/api/v2/chat_sse"
-VANNA_USER_EMAIL = os.environ.get("VANNA_USER_EMAIL", "adi@vanna.ai")
-VANNA_AGENT_ID = os.environ.get("VANNA_AGENT_ID", "hosted-app-usage")
+VANNA_USER_EMAIL = os.environ.get("VANNA_USER_EMAIL")
+VANNA_AGENT_ID = os.environ.get("VANNA_AGENT_ID")
 VANNA_STRUCTURED_PREFIX = os.environ.get("VANNA_STRUCTURED_PREFIX", "hosted app")  # For structured tasks
 VANNA_EXPLORATORY_PREFIX = os.environ.get("VANNA_EXPLORATORY_PREFIX", "hosted app")  # For exploratory questions
 

@@ -38,11 +38,13 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set API keys
-export OPENAI_API_KEY="your-openai-key"
-export VANNA_API_KEY="vn-96862437e7034ebeb1082c45e0181caf"  # Default provided
-export VANNA_USER_EMAIL="adi@vanna.ai"  # Default provided
-export VANNA_AGENT_ID="look-service-account"  # Default provided
+# Configure environment variables
+cp .env.example .env
+# Edit .env and add your API keys:
+#   - OPENAI_API_KEY (required)
+#   - VANNA_API_KEY (required)
+#   - VANNA_USER_EMAIL (required)
+#   - VANNA_AGENT_ID (required)
 
 # Authenticate with Google Cloud (for schema extraction)
 gcloud auth application-default login
@@ -87,18 +89,19 @@ python main.py
   - Auth Token  
   - Sandbox Number (e.g., +14155238886)
 
-**3. Set Environment Variables**
+**3. Configure Environment Variables**
+Edit your `.env` file and add:
 ```bash
-export TWILIO_ENABLED="true"
-export TWILIO_ACCOUNT_SID="your-account-sid"
-export TWILIO_AUTH_TOKEN="your-auth-token"
-export TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"  # Sandbox number
-export TWILIO_WHATSAPP_TO="whatsapp:+12345678900"    # YOUR number with country code
+TWILIO_ENABLED=true
+TWILIO_ACCOUNT_SID=your-account-sid
+TWILIO_AUTH_TOKEN=your-auth-token
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886  # Sandbox number
+TWILIO_WHATSAPP_TO=whatsapp:+12345678900    # YOUR number with country code
 ```
 
-**4. Install Twilio**
+**4. Install Twilio** (already in requirements.txt)
 ```bash
-pip install twilio
+pip install -r requirements.txt
 ```
 
 **5. Test**

@@ -67,12 +67,12 @@ Reason: 🚨 ANOMALY DETECTED (HIGH): Engagement dropped 15%...
 
 ## Environment Variables
 
-Already set with defaults:
+Configure in your `.env` file (copy from `.env.example`):
 ```bash
-OPENAI_API_KEY="your-key"  # You need to set this
-VANNA_API_KEY="vn-96862437e7034ebeb1082c45e0181caf"  # Default
-VANNA_AGENT_ID="hosted-app-usage"  # Default (updated!)
-VANNA_AGENT_PREFIX="hosted-app-usage"  # Default (updated!)
+OPENAI_API_KEY=your-openai-api-key-here
+VANNA_API_KEY=your-vanna-api-key-here
+VANNA_USER_EMAIL=your-email@example.com
+VANNA_AGENT_ID=hosted-app-usage
 ```
 
 ## Verification
