@@ -20,8 +20,10 @@ dist/
 *.sqlite3
 questions.db
 
-# Generated schema (may contain sensitive info)
+# User-specific files (may contain sensitive info)
 schema.json
+training_data.csv
+tasks.yaml
 
 # OS files
 .DS_Store

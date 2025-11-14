@@ -70,15 +70,17 @@ cp training_data.example.csv training_data.csv
 
 ### 2. Configure Tasks
 
-For **testing** (short intervals):
+Create your tasks configuration:
 ```bash
-cp tasks_test.yaml tasks.yaml
+cp tasks.example.yaml tasks.yaml
+# Edit tasks.yaml with your monitoring tasks and questions
 ```
 
-For **production** (realistic intervals):
-```bash
-# tasks.yaml is already configured for production
-```
+The example includes:
+- Daily user engagement monitoring
+- Revenue tracking with dropoff alerts
+- Hourly order volume checks
+- Weekly signup comparisons
 
 ### 3. Run
 
@@ -287,9 +289,10 @@ proactive-agent/
 ├── main.py                      # Main monitoring agent (Creative/Vanna/Alert)
 ├── extract_schema.py            # BigQuery schema extractor
 ├── csv_to_schema.py             # CSV to schema.json converter
-├── tasks.yaml                   # Production config (hours)
 ├── .env                         # Your secrets (not in git)
 ├── .env.example                 # Template for environment variables
+├── tasks.yaml                   # Your monitoring tasks (create from example)
+├── tasks.example.yaml           # Example tasks configuration
 ├── schema.json                  # Your database schema (create from examples)
 ├── schema.example.json          # Example schema (JSON format)
 ├── schema.example.csv           # Example schema (CSV format)
@@ -298,7 +301,7 @@ proactive-agent/
 ├── questions.db                 # SQLite database (generated)
 ├── requirements.txt             # Python dependencies
 ├── setup_check.py               # Setup verification script
-├── .gitignore                   # Excludes secrets and generated files
+├── .gitignore                   # Excludes secrets and user files
 └── README.md                    # This file
 ```
 

@@ -1,0 +1,45 @@
+# Monitoring Tasks Configuration
+# This is an example configuration - customize for your use case
+
+structured_tasks:
+  # Example 1: Monitor user engagement
+  - name: user_engagement
+    cadence_hours: 24  # Run daily
+    question: "How many users were active in the last 24 hours compared to the daily median?"
+    alert_mode: "anomaly"
+    anomaly_threshold:
+      type: "percent_change"
+      value: 0.10  # Alert if 10% change
+
+  # Example 2: Track revenue
+  - name: daily_revenue
+    cadence_hours: 24  # Run daily
+    question: "What was total revenue yesterday compared to the average for this day of the week?"
+    alert_mode: "anomaly"
+    anomaly_threshold:
+      type: "dropoff"
+      value: 0.15  # Alert if revenue drops 15% or more
+
+  # Example 3: Monitor order volume
+  - name: order_volume
+    cadence_hours: 1  # Run hourly
+    question: "How many orders were placed in the last hour?"
+    alert_mode: "automatic"  # Always alert with results
+
+  # Example 4: Track new signups
+  - name: new_signups
+    cadence_hours: 168  # Run weekly (7 days)
+    question: "How many new users signed up this week compared to last week?"
+    alert_mode: "anomaly"
+    anomaly_threshold:
+      type: "percent_change"
+      value: 0.20  # Alert if 20% change
+
+# Creative Agent settings (exploratory questions)
+creative_agent:
+  enabled: true
+  cadence_hours: 1  # Generate new questions hourly
+  alert_mode: "anomaly"
+  anomaly_threshold:
+    type: "general"
+    value: 0.05  # 5% threshold for anomaly detection
