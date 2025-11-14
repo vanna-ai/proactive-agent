@@ -206,13 +206,13 @@ If no anomaly detected, set anomaly_detected to false and leave other fields emp
         return {"anomaly_detected": False, "reason": "Error in detection", "severity": "low"}
 
 
-def send_whatsapp_alert(task_name, task_type, alert_reason, question):
+def send_whatsapp_alert(task_name, task_type, alert_reason, question, result_text=None):
     """Send alert via WhatsApp using Twilio"""
     if not TWILIO_ENABLED or not twilio_client:
         return False
-    
+
     try:
-        # Format message
+        # Format message with result
         message = f"""🔔 MONITORING ALERT
 
 Task: {task_name.upper()}
@@ -220,9 +220,17 @@ Type: {task_type}
 
 {alert_reason}
 
-Question: {question}
+Question: {question}"""
 
-Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
+        # Add result if available (truncate if too long for WhatsApp)
+        if result_text:
+            # WhatsApp has 1600 char limit
+            max_result_length = 800  # Leave room for other content
+            if len(result_text) > max_result_length:
+                result_text = result_text[:max_result_length] + "..."
+            message += f"\n\n📊 Result:\n{result_text}"
+
+        message += f"\n\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
 
         # Send via Twilio
         twilio_client.messages.create(
@@ -230,10 +238,10 @@ Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"""
             from_=TWILIO_WHATSAPP_FROM,
             to=TWILIO_WHATSAPP_TO
         )
-        
+
         print(f"   📱 WhatsApp alert sent!")
         return True
-        
+
     except Exception as e:
         print(f"   ⚠️  WhatsApp alert failed: {e}")
         return False
@@ -396,9 +404,9 @@ def vanna_worker():
                 print(f"Question: {question}")
                 print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
                 print(f"{'🔔'*30}\n")
-                
-                # Send WhatsApp alert
-                send_whatsapp_alert(task_name, task_type, alert_reason, question)
+
+                # Send WhatsApp alert with result
+                send_whatsapp_alert(task_name, task_type, alert_reason, question, result['result'])
         
         # Mark task as done
         question_queue.task_done()
