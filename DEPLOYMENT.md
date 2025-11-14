@@ -24,25 +24,20 @@ These files are in `.gitignore` (they contain private data), so you'll need to u
 
 ## Step 2: Deploy to Render
 
-### Option A: Deploy via Render Dashboard (Recommended)
-
-1. Go to https://dashboard.render.com
-2. Click **New +** → **Blueprint**
-3. Connect your GitHub repository: `vanna-ai/proactive-agent`
-4. Render will automatically detect the `render.yaml` file
-5. Click **Apply** to create the service
-
-### Option B: Deploy as Web Service Manually
+**Note**: Render's free tier doesn't support background workers, so we'll deploy as a Web Service.
 
 1. Go to https://dashboard.render.com
 2. Click **New +** → **Web Service**
-3. Connect your GitHub repository
+3. Connect your GitHub repository: `vanna-ai/proactive-agent`
 4. Configure:
    - **Name**: `curiosity-agent`
    - **Runtime**: `Python 3`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `python main.py`
    - **Plan**: `Free`
+5. Click **Create Web Service**
+
+**Important**: The deployment will initially fail because the required files (tasks.yaml, schema.json, training_data.csv) are missing. This is expected - we'll upload them in Step 4.
 
 ## Step 3: Set Environment Variables
 
