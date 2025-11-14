@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: curiosity-agent
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: VANNA_API_KEY
+        sync: false
+      - key: VANNA_USER_EMAIL
+        sync: false
+      - key: VANNA_AGENT_ID
+        sync: false
+      - key: VANNA_STRUCTURED_PREFIX
+        value: "hosted app"
+      - key: VANNA_EXPLORATORY_PREFIX
+        value: "hosted app"
+      - key: TWILIO_ENABLED
+        value: "true"
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+      - key: TWILIO_WHATSAPP_TO
+        sync: false
