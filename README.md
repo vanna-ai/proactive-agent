@@ -1,4 +1,4 @@
-# Monitoring Agent
+# Proactive Agent
 
 Automated database monitoring system with exploratory and structured monitoring, powered by Vanna AI and intelligent anomaly detection.
 
