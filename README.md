@@ -1,28 +1,30 @@
-# Monitoring Agent
+# Proactive Monitoring Agent
 
-Automated database monitoring system with exploratory and structured monitoring, powered by Vanna AI and intelligent anomaly detection.
+A Creative agent continuously peppers questions to Vanna agent which continuously executes them. An Alert agent notifies the user via WhatsApp if something looks off.
 
 ## Overview
 
-This system continuously monitors your database by:
-1. **Generating questions** (AI-powered exploratory + predefined structured tasks)
-2. **Executing via Vanna** (converts questions to SQL, runs queries)
-3. **Detecting anomalies** (AI analyzes results against thresholds)
-4. **Alerting** (terminal now, Slack integration coming)
+This system proactively monitors your database through three autonomous agents:
+
+1. **Creative Agent** - Generates exploratory questions based on your schema, plus runs scheduled structured tasks
+2. **Vanna Agent** - Converts questions to SQL and executes them against your database
+3. **Alert Agent** - Analyzes results for anomalies and sends WhatsApp notifications when issues are detected
 
 ## Architecture
 
 ```
-Question Generators → Queue → Vanna Worker → Alert Agent → Alerts
-├─ Exploratory              ├─ Calls API      ├─ Automatic
-└─ Structured               └─ Gets results   └─ Anomaly Detection
+Creative Agent → Queue → Vanna Agent → Alert Agent → WhatsApp
+├─ Exploratory         ├─ SQL Gen      ├─ Automatic
+└─ Structured          └─ Execution    └─ Anomaly Detection
 ```
 
 **Key Features:**
-- Queue system prevents backlog (max 10 items)
+- Creative agent continuously generates relevant questions about your data
+- Queue system prevents overwhelming the Vanna agent (max 10 items)
 - Exploratory questions pause when queue is full
 - Structured tasks always run on schedule
-- Per-task alert configuration
+- Per-task alert configuration with intelligent anomaly detection
+- WhatsApp notifications keep you informed
 
 ---
 
@@ -157,7 +159,7 @@ structured_tasks:
     question: "What was revenue this week vs last week?"
     alert_mode: "automatic"
 
-curiosity:
+creative_agent:
   enabled: true
   cadence_hours: 1  # Run hourly
   alert_mode: "anomaly"
@@ -257,9 +259,9 @@ Just edit the YAML and restart the agent (Ctrl+C, then re-run).
 ### Delete a Task
 Remove the task from YAML and restart.
 
-### Disable Curiosity
+### Disable Creative Agent
 ```yaml
-curiosity:
+creative_agent:
   enabled: false
 ```
 
@@ -285,34 +287,37 @@ curiosity_agent/
 
 ## How It Works
 
-### 1. Question Generation
+### 1. Creative Agent (Question Generation)
 
-**Exploratory Mode:**
-- AI generates questions based on schema and past Q-SQL pairs
-- Checks for duplicates
-- Pauses if queue is full (>10 items)
+**Exploratory Questions:**
+- AI generates novel questions based on your database schema and past Q-SQL pairs
+- Checks for duplicates to avoid repetition
+- Pauses if queue is full (>10 items) to prevent overwhelming Vanna
 
-**Structured Mode:**
-- Runs predefined questions from `tasks.yaml`
-- Always runs on schedule
-- Waits in queue if Vanna is busy
+**Structured Tasks:**
+- Runs predefined questions from `tasks.yaml` on a schedule
+- Always executes on time
+- Waits in queue if Vanna agent is busy
 
-### 2. Vanna Execution
+### 2. Vanna Agent (SQL Execution)
 
-- Questions prefixed with "look service:" to route to correct agent
-- Vanna converts to SQL and executes
+- Receives questions from the queue
+- Converts natural language to SQL queries
+- Executes against your database
 - Returns results as text
 
-### 3. Alert Agent
+### 3. Alert Agent (Anomaly Detection)
 
 **Automatic Mode:**
-- Every result triggers an alert
+- Every result triggers a WhatsApp alert
 - No analysis needed
+- Use for critical metrics you always want to see
 
 **Anomaly Mode:**
-- AI (GPT-4o-mini) analyzes result against threshold
-- Detects percent changes, dropoffs, spikes
-- Only alerts if anomaly found
+- AI (GPT-4o-mini) analyzes results against configured thresholds
+- Detects percent changes, dropoffs, spikes, and other anomalies
+- Only sends WhatsApp alert if something looks off
+- Keeps notifications relevant and actionable
 
 ---
 
@@ -322,7 +327,7 @@ curiosity_agent/
 ```
 ⏭️  [EXPLORATORY] Queue full (11 items), skipping...
 ```
-**Solution:** This is normal. Exploratory questions pause until queue clears.
+**Solution:** This is normal. Creative agent pauses exploratory questions until Vanna agent clears the queue.
 
 ### Vanna API error
 ```
@@ -337,7 +342,7 @@ curiosity_agent/
 **Solution:** Run `python extract_schema.py` first.
 
 ### OpenAI rate limit
-**Solution:** Increase `cadence_hours` for exploratory mode.
+**Solution:** Increase `cadence_hours` for the creative agent in `tasks.yaml`.
 
 ### WhatsApp alert failed
 ```
