@@ -48,11 +48,24 @@ cp .env.example .env
 #   - VANNA_USER_EMAIL (required)
 #   - VANNA_AGENT_ID (required)
 
-# Authenticate with Google Cloud (for schema extraction)
-gcloud auth application-default login
+# Create schema.json (choose ONE option):
 
-# Extract BigQuery schema
+# OPTION A: Extract from BigQuery
+gcloud auth application-default login
 python extract_schema.py
+
+# OPTION B: Convert from CSV
+# 1. Create a CSV file describing your schema (see schema.example.csv)
+# 2. Convert it to schema.json:
+python csv_to_schema.py your_schema.csv --project your-project --dataset your-dataset
+
+# OPTION C: Create manually
+# Use schema.example.json as a template and customize for your database
+
+# Create training_data.csv
+# Use training_data.example.csv as a template with example question-SQL pairs
+cp training_data.example.csv training_data.csv
+# Edit with your own question-SQL examples
 ```
 
 ### 2. Configure Tasks
@@ -270,17 +283,23 @@ creative_agent:
 ## Project Structure
 
 ```
-curiosity_agent/
-├── main.py                 # Main monitoring agent
-├── extract_schema.py       # BigQuery schema extractor
-├── tasks.yaml              # Production config (hours)
-├── tasks_test.yaml         # Test config (seconds)
-├── training_data.csv       # Q-SQL training pairs
-├── schema.json             # BigQuery schema (generated)
-├── questions.db            # SQLite database (generated)
-├── requirements.txt        # Python dependencies
-├── setup_check.py          # Setup verification script
-└── README.md              # This file
+proactive-agent/
+├── main.py                      # Main monitoring agent (Creative/Vanna/Alert)
+├── extract_schema.py            # BigQuery schema extractor
+├── csv_to_schema.py             # CSV to schema.json converter
+├── tasks.yaml                   # Production config (hours)
+├── .env                         # Your secrets (not in git)
+├── .env.example                 # Template for environment variables
+├── schema.json                  # Your database schema (create from examples)
+├── schema.example.json          # Example schema (JSON format)
+├── schema.example.csv           # Example schema (CSV format)
+├── training_data.csv            # Your Q-SQL training pairs (create from example)
+├── training_data.example.csv    # Example training data
+├── questions.db                 # SQLite database (generated)
+├── requirements.txt             # Python dependencies
+├── setup_check.py               # Setup verification script
+├── .gitignore                   # Excludes secrets and generated files
+└── README.md                    # This file
 ```
 
 ---

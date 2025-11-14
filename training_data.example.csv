@@ -1,0 +1,11 @@
+question,sql
+How many users signed up in the last 7 days?,SELECT COUNT(*) as new_users FROM users WHERE created_at >= CURRENT_DATE - INTERVAL 7 DAY
+What was total revenue yesterday?,SELECT SUM(total_amount) as revenue FROM orders WHERE DATE(order_date) = CURRENT_DATE - INTERVAL 1 DAY
+Show top 10 customers by order value,SELECT u.email\, SUM(o.total_amount) as total_spent FROM users u JOIN orders o ON u.id = o.user_id GROUP BY u.id\, u.email ORDER BY total_spent DESC LIMIT 10
+How many active users do we have?,SELECT COUNT(*) FROM users WHERE status = 'active'
+What is the average order value this month?,SELECT AVG(total_amount) as avg_order FROM orders WHERE EXTRACT(MONTH FROM order_date) = EXTRACT(MONTH FROM CURRENT_DATE)
+Show daily order count for last week,SELECT DATE(order_date) as date\, COUNT(*) as orders FROM orders WHERE order_date >= CURRENT_DATE - INTERVAL 7 DAY GROUP BY DATE(order_date) ORDER BY date
+Which products are selling best?,SELECT p.name\, COUNT(oi.id) as units_sold FROM products p JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id\, p.name ORDER BY units_sold DESC LIMIT 20
+How many cancelled orders today?,SELECT COUNT(*) FROM orders WHERE status = 'cancelled' AND DATE(order_date) = CURRENT_DATE
+What is our user retention rate?,SELECT COUNT(DISTINCT user_id) as returning_users FROM orders WHERE user_id IN (SELECT user_id FROM orders GROUP BY user_id HAVING COUNT(*) > 1)
+Show revenue by product category,SELECT p.category\, SUM(o.total_amount) as revenue FROM products p JOIN order_items oi ON p.id = oi.product_id JOIN orders o ON oi.order_id = o.id GROUP BY p.category ORDER BY revenue DESC

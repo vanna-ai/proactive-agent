@@ -1,0 +1,105 @@
+{
+  "project_id": "your-project-id",
+  "dataset_id": "your-dataset-id",
+  "tables": [
+    {
+      "table_name": "users",
+      "description": "User accounts and profiles",
+      "num_rows": 15000,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "mode": "REQUIRED",
+          "description": "Primary key"
+        },
+        {
+          "name": "email",
+          "type": "STRING",
+          "mode": "REQUIRED",
+          "description": "User email address"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "mode": "REQUIRED",
+          "description": "Account creation timestamp"
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "mode": "NULLABLE",
+          "description": "Account status (active, inactive, suspended)"
+        }
+      ]
+    },
+    {
+      "table_name": "orders",
+      "description": "Customer orders",
+      "num_rows": 45000,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "mode": "REQUIRED",
+          "description": "Primary key"
+        },
+        {
+          "name": "user_id",
+          "type": "INTEGER",
+          "mode": "REQUIRED",
+          "description": "Foreign key to users table"
+        },
+        {
+          "name": "total_amount",
+          "type": "FLOAT",
+          "mode": "REQUIRED",
+          "description": "Order total in USD"
+        },
+        {
+          "name": "order_date",
+          "type": "TIMESTAMP",
+          "mode": "REQUIRED",
+          "description": "When order was placed"
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "mode": "REQUIRED",
+          "description": "Order status (pending, shipped, delivered, cancelled)"
+        }
+      ]
+    },
+    {
+      "table_name": "products",
+      "description": "Product catalog",
+      "num_rows": 500,
+      "columns": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "mode": "REQUIRED",
+          "description": "Primary key"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "mode": "REQUIRED",
+          "description": "Product name"
+        },
+        {
+          "name": "price",
+          "type": "FLOAT",
+          "mode": "REQUIRED",
+          "description": "Product price in USD"
+        },
+        {
+          "name": "category",
+          "type": "STRING",
+          "mode": "NULLABLE",
+          "description": "Product category"
+        }
+      ]
+    }
+  ]
+}

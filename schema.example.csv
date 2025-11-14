@@ -1,0 +1,14 @@
+table_name,column_name,data_type,nullable,description
+users,id,INTEGER,REQUIRED,Primary key
+users,email,STRING,REQUIRED,User email address
+users,created_at,TIMESTAMP,REQUIRED,Account creation timestamp
+users,status,STRING,NULLABLE,Account status (active/inactive/suspended)
+orders,id,INTEGER,REQUIRED,Primary key
+orders,user_id,INTEGER,REQUIRED,Foreign key to users table
+orders,total_amount,FLOAT,REQUIRED,Order total in USD
+orders,order_date,TIMESTAMP,REQUIRED,When order was placed
+orders,status,STRING,REQUIRED,Order status (pending/shipped/delivered/cancelled)
+products,id,INTEGER,REQUIRED,Primary key
+products,name,STRING,REQUIRED,Product name
+products,price,FLOAT,REQUIRED,Product price in USD
+products,category,STRING,NULLABLE,Product category
