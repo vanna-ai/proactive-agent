@@ -155,6 +155,50 @@ def call_vanna(question, task_name="unknown", task_type="exploratory"):
         return None
 
 
+def parse_vanna_result(verbose_result):
+    """
+    Parse Vanna's verbose conversational response to extract clean data
+    Returns: Clean, concise summary with key numbers and findings
+    """
+    try:
+        prompt = f"""Extract the key data and findings from this verbose Vanna AI response.
+
+Vanna Response:
+{verbose_result}
+
+Your task: Extract ONLY the actual data, numbers, and key findings. Remove all the conversational fluff like:
+- "I'll help you analyze..."
+- "Let me start by discovering..."
+- "Perfect! I found..."
+- "Now let me search..."
+
+Return a clean, concise summary that includes:
+- Key numbers and metrics
+- Important trends or patterns
+- Actual data points
+- Brief interpretation (1-2 sentences max)
+
+Keep it under 400 characters if possible. Be direct and factual."""
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a data parser. Extract clean facts and numbers from verbose text."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=200,
+            temperature=0.3
+        )
+
+        clean_result = response.choices[0].message.content.strip()
+        return clean_result
+
+    except Exception as e:
+        print(f"   ⚠️  Result parsing error: {e}")
+        # Fall back to truncating the original
+        return verbose_result[:400] + "..." if len(verbose_result) > 400 else verbose_result
+
+
 def detect_anomaly(result_text, threshold_config):
     """
     Detect anomalies in Vanna results using LLM
@@ -194,13 +238,13 @@ If no anomaly detected, set anomaly_detected to false and leave other fields emp
             max_tokens=300,
             temperature=0.3  # Lower temperature for consistent analysis
         )
-        
+
         result = response.choices[0].message.content.strip()
         # Clean up markdown if present
         result = result.replace('```json', '').replace('```', '').strip()
-        
+
         return json.loads(result)
-        
+
     except Exception as e:
         print(f"   ⚠️  Anomaly detection error: {e}")
         return {"anomaly_detected": False, "reason": "Error in detection", "severity": "low"}
@@ -222,13 +266,11 @@ Type: {task_type}
 
 Question: {question}"""
 
-        # Add result if available (truncate if too long for WhatsApp)
+        # Add result if available - parse it first to remove verbose explanations
         if result_text:
-            # WhatsApp has 1600 char limit
-            max_result_length = 800  # Leave room for other content
-            if len(result_text) > max_result_length:
-                result_text = result_text[:max_result_length] + "..."
-            message += f"\n\n📊 Result:\n{result_text}"
+            # Parse the verbose Vanna response to extract clean data
+            clean_result = parse_vanna_result(result_text)
+            message += f"\n\n📊 Result:\n{clean_result}"
 
         message += f"\n\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
 
