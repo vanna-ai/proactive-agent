@@ -266,11 +266,13 @@ Type: {task_type}
 
 Question: {question}"""
 
-        # Add result if available - parse it first to remove verbose explanations
+        # Add result if available (truncate if too long for WhatsApp)
         if result_text:
-            # Parse the verbose Vanna response to extract clean data
-            clean_result = parse_vanna_result(result_text)
-            message += f"\n\n📊 Result:\n{clean_result}"
+            # WhatsApp has 1600 char limit
+            max_result_length = 800  # Leave room for other content
+            if len(result_text) > max_result_length:
+                result_text = result_text[:max_result_length] + "..."
+            message += f"\n\n📊 Result:\n{result_text}"
 
         message += f"\n\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
 
@@ -349,7 +351,7 @@ def build_prompt(schema, training_pairs, recent_questions):
         for i, q in enumerate(recent_questions, 1):
             recent_text += f"{i}. {q}\n"
     
-    prompt = f"""You are a curious data analyst exploring an e-commerce database. Generate ONE specific, measurable question that would be insightful to ask.
+    prompt = f"""You are a curious data analyst exploring a product usage database. Generate ONE specific, measurable question that would be insightful to ask.
 
 {schema_summary}
 
@@ -358,7 +360,7 @@ def build_prompt(schema, training_pairs, recent_questions):
 
 Guidelines:
 - Generate questions similar in style to the training examples
-- Focus on business metrics: sales, users, products, orders, inventory
+- Focus on business metrics: registrations, agents created, database connections, questions asked
 - Include time comparisons (today vs yesterday, this week vs last week, etc.)
 - Ask about trends, top performers, anomalies
 - Be specific and measurable
