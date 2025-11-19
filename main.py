@@ -266,13 +266,11 @@ Type: {task_type}
 
 Question: {question}"""
 
-        # Add result if available (truncate if too long for WhatsApp)
+        # Add result if available - parse it first to remove verbose explanations
         if result_text:
-            # WhatsApp has 1600 char limit
-            max_result_length = 800  # Leave room for other content
-            if len(result_text) > max_result_length:
-                result_text = result_text[:max_result_length] + "..."
-            message += f"\n\n📊 Result:\n{result_text}"
+            # Parse the verbose Vanna response to extract clean data
+            clean_result = parse_vanna_result(result_text)
+            message += f"\n\n📊 Result:\n{clean_result}"
 
         message += f"\n\n🕐 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
 
